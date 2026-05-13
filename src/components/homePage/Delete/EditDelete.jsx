@@ -11,7 +11,6 @@ const EditDelete = ({detailsData}) => {
       headers:{
         'content-type': 'application/json'
       },
-      
     })
     const data = await res.json()
     if (data) {

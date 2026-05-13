@@ -1,4 +1,4 @@
-import DestinationCard from '@/components/homePage/allNavPage/destinationCard/DestinationCard';
+import DestinationCard from '@/components/allNavPage/destinationCard/DestinationCard';
 import { getDestinations } from '@/lib/fetch-data';
 import React from 'react';
 import { ChevronDown } from 'lucide-react';

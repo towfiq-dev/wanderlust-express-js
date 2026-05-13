@@ -1,11 +1,12 @@
-import EditPage from '@/components/homePage/allNavPage/detailsEditPage/EditPage';
+import BookingCard from '@/components/allNavPage/bookingCard/BookingCard';
+import EditPage from '@/components/allNavPage/detailsEditPage/EditPage';
 import EditDelete from '@/components/homePage/Delete/EditDelete';
 import { Calendar, Check, MapPin, Star } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
 
-const DetailsPage = async({params}) => {
-  const {id} = await params
+const DetailsPage = async ({ params }) => {
+  const { id } = await params
   const res = await fetch(`http://localhost:5000/destination/${id}`)
   const detailsData = await res.json()
   const {
@@ -18,11 +19,11 @@ const DetailsPage = async({params}) => {
     imageUrl,
     description
   } = detailsData
-    return (
+  return (
     <div className="max-w-7xl mx-auto p-4 md:p-8 font-sans mt-25">
       <div className='flex justify-end mb-6'>
-        <EditPage detailsData={detailsData}/>
-        <EditDelete detailsData={detailsData}/>
+        <EditPage detailsData={detailsData} />
+        <EditDelete detailsData={detailsData} />
       </div>
       {/* ১. টপ ব্যানার ইমেজ */}
       <div className="relative w-full h-[300px] md:h-[500px] rounded-2xl overflow-hidden mb-10 shadow-lg">
@@ -37,7 +38,7 @@ const DetailsPage = async({params}) => {
 
       {/* ২. মেইন কন্টেন্ট গ্রিড */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        
+
         {/* বাম পাশ: ডিটেইলস */}
         <div className="lg:col-span-2">
           <div className="flex items-center text-gray-500 gap-1 mb-3">
@@ -90,7 +91,7 @@ const DetailsPage = async({params}) => {
           </section>
         </div>
 
-      {/* <BookingCard data={data}/> */}
+        <BookingCard detailsData={detailsData}/>
 
       </div>
     </div>
