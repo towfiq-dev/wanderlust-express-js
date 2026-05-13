@@ -37,7 +37,7 @@ const UserBookingCard = ({booking}) => {
                       <span>
                         Departure:{" "}
                         {new Date(
-                          booking.departureDates
+                          booking.date
                         ).toLocaleDateString("en-US", {
                           day: "numeric",
                           month: "long",
