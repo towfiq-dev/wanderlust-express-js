@@ -34,6 +34,7 @@ const SignInPage = () => {
     provider: "google",
   });
   };
+  
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10 mt-25">
       <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
