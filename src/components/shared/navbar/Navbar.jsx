@@ -1,15 +1,16 @@
 'use client'
-import { Button } from '@heroui/react';
+import { Avatar, Button } from '@heroui/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import Logo from '@/assets/Wanderlust.png'
 import NavLinks from './NavLinks';
+import { authClient } from '@/lib/auth-client';
+//import { Person } from '@gravity-ui/icons';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // স্ক্রল করলে নববার কিছুটা ট্রান্সপারেন্ট হবে (Glassmorphism)
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -18,11 +19,19 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const {data: session} = authClient.useSession()
+  const user = session?.user
+
+  const handleSignOut = async()=>{
+    await authClient.signOut()
+  }
+
+
   const links = (
     <ul className='flex items-center gap-8'>
       <NavLinks href={'/'}>Home</NavLinks>
       <NavLinks href={'/allNav/destinations'}>Destinations</NavLinks>
-      <NavLinks href={'/allNav/allDestinations'}>All Destinations</NavLinks>
+      <NavLinks href={'/allNav/allDestinations'}>Add Destinations</NavLinks>
       <NavLinks href={'/allNav/bookings'}>My Bookings</NavLinks>
       <NavLinks href={'/allNav/admin'}>Admin</NavLinks>
     </ul>
@@ -51,24 +60,28 @@ const Navbar = () => {
           {links}
         </div>
 
-        {/* Action Buttons */}
         <div className='flex items-center gap-3'>
-
+        {
+          user? 
           <div className="hidden md:flex items-center gap-3 border-r pr-3 border-gray-200">
-            <Link href={'/profile'}>
+            <Link href={'allNav/profile'}>
               <Button size="sm" variant="light" className="font-medium">Profile</Button>
             </Link>
+            <Avatar>
+                <Avatar.Image referrerPolicy="no-referrer" alt="John Doe" src={user?.image} />
+                <Avatar.Fallback>{user.name.charAt(0)}</Avatar.Fallback>
+              </Avatar>
             <Button 
               size="sm"
               color="danger" 
               variant="flat"
               className="font-medium"
+              onClick={handleSignOut}
             >
               Sign Out
             </Button>
-          </div>
-
-
+          </div> 
+          : 
           <div className='flex items-center gap-2'>
             <Link href={'/auth/signin'}>
               <Button size="sm" variant="light" className="font-semibold text-gray-700">Login</Button>
@@ -82,6 +95,7 @@ const Navbar = () => {
               </Button>
             </Link>
           </div>
+        }
         </div>
       </div>
     </nav>
