@@ -23,6 +23,17 @@ const BookingCard = ({detailsData}) => {
   const user = session?.user
   
   const handleBooking = async()=>{
+
+    if(!user){
+    toast.error('Please login first')
+    return
+  }
+
+  if(!date){
+    toast.error('Please select a date')
+    return
+  }
+
     const bookingData = {
       userId: user.id,
       userImage: user.image,
@@ -42,11 +53,11 @@ const BookingCard = ({detailsData}) => {
     })
 
     const data = await res.json()
-    if (data) {
-      toast.success('User Info Added successfully')
-    }else{
-      toast.error('Something went wrong')
-    }
+    if (data.insertedId) {
+    toast.success('Booking successful')
+  }else{
+    toast.error('Something went wrong')
+  }
   }
 
   return (
@@ -59,13 +70,6 @@ const BookingCard = ({detailsData}) => {
                 <span className="text-gray-400 font-medium text-sm">/ per person</span>
               </div>
             </div>
-
-            {/* <div className="mb-8">
-              <label className="block text-sm font-bold text-gray-700 mb-2">Departure Date</label>
-              <div className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 font-semibold">
-                {departureDate || "05/15/2026"}
-              </div>
-            </div> */}
             <DateField onChange={setDate} className="w-[256px]" name="date">
       <Label>Date</Label>
       <DateField.Group>

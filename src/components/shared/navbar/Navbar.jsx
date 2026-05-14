@@ -1,4 +1,5 @@
 'use client'
+
 import { Avatar, Button } from '@heroui/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -6,98 +7,191 @@ import React, { useState, useEffect } from 'react';
 import Logo from '@/assets/Wanderlust.png'
 import NavLinks from './NavLinks';
 import { authClient } from '@/lib/auth-client';
-//import { Person } from '@gravity-ui/icons';
+import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
+
   const [isScrolled, setIsScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
+
     window.addEventListener('scroll', handleScroll);
+
     return () => window.removeEventListener('scroll', handleScroll);
+
   }, []);
 
-  const {data: session} = authClient.useSession()
+  const { data: session } = authClient.useSession()
   const user = session?.user
 
-  const handleSignOut = async()=>{
+  const handleSignOut = async () => {
     await authClient.signOut()
   }
 
-
   const links = (
-    <ul className='flex items-center gap-8'>
+    <>
       <NavLinks href={'/'}>Home</NavLinks>
       <NavLinks href={'/allNav/destinations'}>Destinations</NavLinks>
-      <NavLinks href={'/allNav/allDestinations'}>Add Destinations</NavLinks>
+      <NavLinks href={'/allNav/allDestinations'}>Add Destination</NavLinks>
       <NavLinks href={'/allNav/bookings'}>My Bookings</NavLinks>
       <NavLinks href={'/allNav/admin'}>Admin</NavLinks>
-    </ul>
+    </>
   );
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4 ${
-      isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm py-2' : 'bg-transparent'
-    }`}>
-      <div className='max-w-7xl mx-auto flex justify-between items-center'>
-        
-        {/* Logo Section */}
-        <Link href="/" className='flex-shrink-0'>
-          <Image 
-            className='w-32 md:w-40 h-auto hover:opacity-80 transition-opacity' 
-            width={160} 
-            height={40} 
-            src={Logo} 
+
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300
+    ${isScrolled
+        ? 'bg-white/80 backdrop-blur-md shadow-md py-3'
+        : 'bg-transparent py-5'
+      }`}>
+
+      <div className='max-w-7xl mx-auto px-4 flex justify-between items-center'>
+
+        {/* Logo */}
+        <Link href="/">
+          <Image
+            src={Logo}
             alt='Logo'
+            width={160}
+            height={50}
             priority
+            className='w-32 md:w-40 h-auto'
           />
         </Link>
 
-        {/* Navigation Links - Hidden on Mobile, Visible on Desktop */}
-        <div className='hidden lg:block'>
+        {/* Desktop Menu */}
+        <ul className='hidden lg:flex items-center gap-8'>
           {links}
+        </ul>
+
+        {/* Right Side */}
+        <div className='hidden md:flex items-center gap-3'>
+
+          {
+            user ?
+
+              <>
+                <Link href={'/allNav/profile'}>
+                  <Button variant='light'>
+                    Profile
+                  </Button>
+                </Link>
+
+                <Avatar
+                  src={user?.image}
+                  name={user?.name}
+                  className='w-10 h-10 border-2 border-cyan-500'
+                />
+
+                <Button
+                  color='danger'
+                  variant='flat'
+                  onClick={handleSignOut}
+                >
+                  Sign Out
+                </Button>
+              </>
+
+              :
+
+              <>
+                <Link href={'/auth/signin'}>
+                  <Button variant='light'>
+                    Login
+                  </Button>
+                </Link>
+
+                <Link href={'/auth/signup'}>
+                  <Button className='bg-black text-white'>
+                    Sign Up
+                  </Button>
+                </Link>
+              </>
+          }
+
         </div>
 
-        <div className='flex items-center gap-3'>
-        {
-          user? 
-          <div className="hidden md:flex items-center gap-3 border-r pr-3 border-gray-200">
-            <Link href={'allNav/profile'}>
-              <Button size="sm" variant="light" className="font-medium">Profile</Button>
-            </Link>
-            <Avatar>
-                <Avatar.Image referrerPolicy="no-referrer" alt="John Doe" src={user?.image} />
-                <Avatar.Fallback>{user.name.charAt(0)}</Avatar.Fallback>
-              </Avatar>
-            <Button 
-              size="sm"
-              color="danger" 
-              variant="flat"
-              className="font-medium"
-              onClick={handleSignOut}
-            >
-              Sign Out
-            </Button>
-          </div> 
-          : 
-          <div className='flex items-center gap-2'>
-            <Link href={'/auth/signin'}>
-              <Button size="sm" variant="light" className="font-semibold text-gray-700">Login</Button>
-            </Link>
-            <Link href={'/auth/signup'}>
-              <Button 
-                size="sm" 
-                className="bg-black text-white font-medium hover:bg-gray-800 transition-all shadow-md"
-              >
-                Sign Up
-              </Button>
-            </Link>
-          </div>
-        }
-        </div>
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className='lg:hidden'
+        >
+          {
+            menuOpen
+              ? <X size={28} />
+              : <Menu size={28} />
+          }
+        </button>
+
       </div>
+
+      {/* Mobile Menu */}
+      {
+        menuOpen && (
+
+          <div className='lg:hidden bg-white shadow-lg px-6 py-5 space-y-5'>
+
+            <ul className='flex flex-col gap-5'>
+              {links}
+            </ul>
+
+            {
+              user ?
+
+                <div className='flex flex-col gap-3 pt-4 border-t'>
+
+                  <div className='flex items-center gap-3'>
+
+                    <Avatar
+                      src={user?.image}
+                      name={user?.name}
+                    />
+
+                    <div>
+                      <h3 className='font-semibold'>{user?.name}</h3>
+                      <p className='text-sm text-gray-500'>{user?.email}</p>
+                    </div>
+
+                  </div>
+
+                  <Button
+                    color='danger'
+                    variant='flat'
+                    onClick={handleSignOut}
+                  >
+                    Sign Out
+                  </Button>
+
+                </div>
+
+                :
+
+                <div className='flex flex-col gap-3 pt-4 border-t'>
+
+                  <Link href={'/auth/signin'}>
+                    <Button className='w-full' variant='light'>
+                      Login
+                    </Button>
+                  </Link>
+
+                  <Link href={'/auth/signup'}>
+                    <Button className='w-full bg-black text-white'>
+                      Sign Up
+                    </Button>
+                  </Link>
+
+                </div>
+            }
+
+          </div>
+        )
+      }
+
     </nav>
   );
 };
