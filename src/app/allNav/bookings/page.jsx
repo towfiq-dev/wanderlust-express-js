@@ -1,10 +1,10 @@
 import UserBookingCard from '@/components/allNavPage/userBookingCard/UserBookingCard';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
-// import { BadgeCheck, CalendarDays, Eye, MapPin } from 'lucide-react';
-// import Image from 'next/image';
+ import { BadgeCheck, CalendarDays, Eye, MapPin } from 'lucide-react';
+ import Image from 'next/image';
 import React from 'react';
-//import Link from 'next/link';
+import Link from 'next/link';
 
 const Bookings = async() => {
   const session = await auth.api.getSession({

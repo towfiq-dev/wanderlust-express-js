@@ -1,21 +1,32 @@
 import BookingCard from '@/components/allNavPage/bookingCard/BookingCard';
 import EditPage from '@/components/allNavPage/detailsEditPage/EditPage';
 import EditDelete from '@/components/homePage/Delete/EditDelete';
+import { auth } from '@/lib/auth';
 import { Calendar, Check, MapPin, Star } from 'lucide-react';
+import { headers } from 'next/headers';
 import Image from 'next/image';
 import React from 'react';
 
 const DetailsPage = async ({ params }) => {
   const { id } = await params
-  const res = await fetch(`http://localhost:5000/destination/${id}`)
+  const token = await auth.api.getToken({
+    headers: await headers()
+  })
+  console.log(token);
+  
+  const res = await fetch(`http://localhost:5000/destination/${id}`, 
+    {
+    headers:{
+      authorization: `Bearer${token}`
+    }
+  }
+)
   const detailsData = await res.json()
   const {
     destinationName,
     country,
     category,
-    price,
     duration,
-    departureDate,
     imageUrl,
     description
   } = detailsData
@@ -25,7 +36,7 @@ const DetailsPage = async ({ params }) => {
         <EditPage detailsData={detailsData} />
         <EditDelete detailsData={detailsData} />
       </div>
-      {/* ১. টপ ব্যানার ইমেজ */}
+
       <div className="relative w-full h-[300px] md:h-[500px] rounded-2xl overflow-hidden mb-10 shadow-lg">
         <Image
           src={imageUrl}
@@ -36,10 +47,8 @@ const DetailsPage = async ({ params }) => {
         />
       </div>
 
-      {/* ২. মেইন কন্টেন্ট গ্রিড */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
 
-        {/* বাম পাশ: ডিটেইলস */}
         <div className="lg:col-span-2">
           <div className="flex items-center text-gray-500 gap-1 mb-3">
             <MapPin size={18} className="text-cyan-500" />
