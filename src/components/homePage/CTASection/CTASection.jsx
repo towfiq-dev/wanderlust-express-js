@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 const CTASection = () => {
   return (
@@ -19,10 +20,12 @@ const CTASection = () => {
           Join thousands of travelers who have discovered the world with us
         </p>
         
-        <button className="bg-white text-black px-10 py-5 flex items-center gap-3 mx-auto font-bold uppercase tracking-widest hover:bg-cyan-500 hover:text-white transition-all duration-300 group">
+        <Link href={'/allNav/destinations'}>
+        <button className="bg-white cursor-pointer text-black px-10 py-5 flex items-center gap-3 mx-auto font-bold uppercase tracking-widest hover:bg-cyan-500 hover:text-white transition-all duration-300 group">
           Book Your Trip Today
           <ArrowRight className="group-hover:translate-x-2 transition-transform" />
         </button>
+        </Link>
       </div>
     </section>
   );

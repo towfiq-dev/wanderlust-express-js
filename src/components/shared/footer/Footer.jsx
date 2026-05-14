@@ -7,7 +7,7 @@ import { HiOutlineArrowUpRight } from 'react-icons/hi2';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0a0a0a] text-gray-400 px-6 md:px-8 py-6 font-sans">
+    <footer className="bg-[#0a0a0a] text-gray-400 mt-10 md:mt-25 px-6 md:px-8 py-6 font-sans">
       <div className="max-w-7xl mx-auto">
         
         {/* Top Section: Branding & Newsletter */}
