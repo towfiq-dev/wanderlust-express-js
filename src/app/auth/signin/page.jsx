@@ -1,157 +1,216 @@
-'use client'
-import { authClient } from '@/lib/auth-client';
-import { Lock, Mail } from 'lucide-react';
+'use client';
+
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import React from 'react';
-import { BsGoogle } from 'react-icons/bs';
+import React, { useState } from 'react';
+import { authClient } from '@/lib/auth-client';
 import { toast } from 'react-toastify';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { GrGoogle } from 'react-icons/gr';
+import { Mail, Lock } from 'lucide-react';
 
 const SignInPage = () => {
 
-  const router = useRouter()
-      const onSubmit = async(e)=>{
-      e.preventDefault()
-      const formData  = new FormData(e.currentTarget)
-      const user = Object.fromEntries(formData.entries())
-  
-      const {data, error} = await authClient.signIn.email({
-        email: user.email,
-        password: user.password
-      })
-      if (data) {
-        toast.success('You are Successfully SignIn')
-        router.push('/')
-      }else if (error) {
-        toast.error(error.message)
-      }else{
-        toast.error('Something went wrong. Please try again later')
-      }
-    }
+  const [showPassword, setShowPassword] = useState(false);
 
-    const signIn = async () => {
-  const data = await authClient.signIn.social({
-    provider: "google",
-  });
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  // Google Sign In
+  const handleGoogleSignIn = async () => {
+    await authClient.signIn.social({
+      provider: 'google',
+    });
   };
-  
+
+  // Submit
+  const onSubmit = async (data) => {
+
+    const { email, password } = data;
+
+    const { data: res, error } = await authClient.signIn.email({
+      email,
+      password,
+    });
+
+    if (res) {
+
+      toast.success('Successfully Signed In');
+
+      router.push('/');
+
+    } else if (error) {
+
+      toast.error(error.message || 'Something went wrong.');
+
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10 mt-25">
-      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
+    <div className="min-h-screen mt-25 bg-gradient-to-br from-slate-100 via-gray-100 to-slate-200 flex justify-center items-center px-4 py-10">
 
-        {/* Heading */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900">
-            Welcome Back
-          </h1>
+      <div className="w-full max-w-[620px]">
 
-          <p className="text-gray-500 mt-2">
-            Resume your adventure with Wanderlust
-          </p>
-        </div>
+        {/* Card */}
+        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
 
-        {/* Form */}
-        <form className="space-y-5" onSubmit={onSubmit}>
+          {/* Top Banner */}
+          <div className="bg-gradient-to-r from-cyan-500 to-blue-500 px-8 py-10 text-center">
 
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Email Address
-            </label>
+            <h2 className="text-4xl font-bold text-white">
+              Welcome Back
+            </h2>
 
-            <div className="relative">
-              <Mail
-                size={18}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-              />
-
-              <input
-                type="email" name='email'
-                placeholder="Enter your email"
-                className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pl-11 pr-4 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
-              />
-            </div>
+            <p className="text-cyan-50 mt-3 text-sm md:text-base">
+              Login to continue your amazing journey with us.
+            </p>
           </div>
 
-          {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Password
-            </label>
+          {/* Form Area */}
+          <div className="p-8 md:p-12">
 
-            <div className="relative">
-              <Lock
-                size={18}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-              />
-
-              <input
-                type="password" name='password'
-                placeholder="Enter your password"
-                className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pl-11 pr-4 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
-              />
-            </div>
-          </div>
-
-          {/* Remember & Forgot */}
-          <div className="flex items-center justify-between text-sm">
-            <label className="flex items-center gap-2 text-gray-600">
-              <input
-                type="checkbox"
-                className="rounded cursor-pointer border-gray-300 text-cyan-500 focus:ring-cyan-500"
-              />
-              Remember me
-            </label>
-
-            <Link
-              href='/auth/forgotPassword'
-              className="font-medium text-cyan-600 hover:underline"
+            <form
+              className="space-y-5"
+              onSubmit={handleSubmit(onSubmit)}
             >
-              Forgot password?
-            </Link>
-          </div>
 
-          {/* Button */}
-          <button
-            type="submit"
-            className="w-full cursor-pointer rounded-xl bg-cyan-500 py-3 font-semibold text-white transition hover:bg-cyan-600 active:scale-[0.98]"
-          >
-            Sign In
-          </button>
-        </form>
+              {/* Email */}
+              <div>
+                <label className="block mb-2 text-sm font-semibold text-gray-700">
+                  Email Address
+                </label>
 
-        {/* Divider */}
-        <div className="relative my-7">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
-          </div>
+                <div className="relative">
+                  <Mail
+                    size={18}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                  />
 
-          <div className="relative flex justify-center text-sm">
-            <span className="bg-white px-3 text-gray-500">
-              Or continue with
-            </span>
+                  <input
+                    type="email"
+                    placeholder="Enter your email address"
+                    {...register('email', { required: true })}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-4 pl-12 pr-4 outline-none transition-all focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100"
+                  />
+                </div>
+
+                {errors.email && (
+                  <small className="text-red-500 mt-1 inline-block">
+                    Email is required
+                  </small>
+                )}
+              </div>
+
+              {/* Password */}
+              <div>
+                <label className="block mb-2 text-sm font-semibold text-gray-700">
+                  Password
+                </label>
+
+                <div className="relative">
+                  <Lock
+                    size={18}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                  />
+
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Enter your password"
+                    {...register('password', { required: true })}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-4 pl-12 pr-12 outline-none transition-all focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100"
+                  />
+
+                  <span
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-cyan-500 transition"
+                  >
+                    {showPassword ? (
+                      <FaEyeSlash size={18} />
+                    ) : (
+                      <FaEye size={18} />
+                    )}
+                  </span>
+                </div>
+
+                {errors.password && (
+                  <small className="text-red-500 mt-1 inline-block">
+                    Password is required
+                  </small>
+                )}
+              </div>
+
+              {/* Remember & Forgot */}
+              <div className="flex items-center justify-between">
+
+                <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="accent-cyan-500 cursor-pointer"
+                  />
+                  Remember Me
+                </label>
+
+                <Link
+                  href="/auth/forgotPassword"
+                  className="text-sm font-medium text-cyan-600 hover:underline"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
+
+              {/* Button */}
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white py-4 rounded-2xl font-semibold text-lg shadow-lg hover:scale-[1.01] hover:shadow-cyan-200 transition-all cursor-pointer"
+              >
+                Sign In
+              </button>
+            </form>
+
+            {/* Divider */}
+            <div className="relative my-8">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200"></div>
+              </div>
+
+              <div className="relative flex justify-center">
+                <span className="bg-white px-4 text-sm text-gray-500">
+                  OR CONTINUE WITH
+                </span>
+              </div>
+            </div>
+
+            {/* Google Button */}
+            <button
+              onClick={handleGoogleSignIn}
+              className="w-full border border-gray-200 bg-white hover:bg-gray-50 py-4 rounded-2xl flex items-center justify-center gap-3 text-[17px] font-semibold text-gray-700 transition-all cursor-pointer"
+            >
+              <GrGoogle className="text-xl" />
+              Sign In With Google
+            </button>
+
+            {/* Footer */}
+            <p className="text-center mt-8 text-gray-600 text-sm md:text-base">
+              Don&apos;t have an account?{' '}
+              <Link
+                href="/auth/signup"
+                className="font-semibold text-cyan-600 hover:underline"
+              >
+                Register
+              </Link>
+            </p>
+
           </div>
         </div>
-
-        {/* Google Button */}
-        <button onClick={signIn} type="button" className="w-full cursor-pointer rounded-xl border border-gray-200 py-3 font-medium text-gray-700 flex items-center justify-center transition hover:bg-gray-50">
-          <span className="mr-2"><BsGoogle/></span>
-          Sign In With Google
-        </button>
-
-        {/* Footer */}
-        <p className="mt-7 text-center text-gray-500">
-          Don&apos;t have an account?{' '}
-          <Link 
-            href={'/auth/signup'}
-            className="font-semibold cursor-pointer text-cyan-600 hover:underline"
-          >
-            Sign Up
-          </Link>
-        </p>
       </div>
     </div>
-  )
+  );
 };
 
 export default SignInPage;
