@@ -2,25 +2,24 @@ import BookingCard from '@/components/allNavPage/bookingCard/BookingCard';
 import EditPage from '@/components/allNavPage/detailsEditPage/EditPage';
 import EditDelete from '@/components/homePage/Delete/EditDelete';
 import { auth } from '@/lib/auth';
-import { Calendar, Check, MapPin, Star } from 'lucide-react';
-import { headers } from 'next/headers';
+import { Calendar, Check, MapPin, Star } from 'lucide-react';import { headers } from 'next/headers';
+;
 import Image from 'next/image';
 import React from 'react';
 
 const DetailsPage = async ({ params }) => {
   const { id } = await params
-  const tokenData = await auth.api.getToken({
+
+  const {token} = await auth.api.getToken({
     headers: await headers()
   })
-  const token = tokenData?.token
   
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destination/${id}`, 
-    {
-    headers:{
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destination/${id}`, {
+    headers: {
       authorization: `Bearer ${token}`
     }
-  }
-)
+  })
+
   const detailsData = await res.json()
   const {
     destinationName,

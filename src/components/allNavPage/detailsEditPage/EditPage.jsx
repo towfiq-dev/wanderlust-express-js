@@ -1,4 +1,5 @@
 "use client";
+import { authClient } from "@/lib/auth-client";
 import {Envelope} from "@gravity-ui/icons";
 import {Button, FieldError, Input, Label, ListBox, Modal, Surface, TextArea, TextField, Select} from "@heroui/react";
 import { Edit } from "lucide-react";
@@ -24,9 +25,14 @@ const Modals = ({detailsData}) => {
   const formData = new FormData(e.currentTarget)
   const newData = Object.fromEntries(formData.entries())
   
+  const {data: tokenData} = await authClient.token()
+
   const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destination/${detailsData._id}`,{
     method: 'PATCH',
-    headers:{'content-type': 'application/json'},
+    headers:{
+      'content-type': 'application/json',
+      authorization: `Bearer ${tokenData?.token}`
+    },
     body: JSON.stringify(newData)
 
   })
@@ -34,7 +40,7 @@ const Modals = ({detailsData}) => {
 
   if (data) {
     toast.success('Edit is Successful')
-    router.push('/allNav/destination')
+    router.push('/allNav/destinations')
   }else{
     toast.error('Something went wrong')
   }

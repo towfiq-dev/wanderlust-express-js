@@ -45,13 +45,13 @@ const BookingCard = ({detailsData}) => {
       country,
       date: new Date(date)
     }
-    
-    const {data:tokenData} = await authClient.token()
+  const {data: tokenData} = await authClient.token()
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/bookings`,{
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        authorization: `Bearer ${tokenData?.json}`
+        authorization: `Bearer ${tokenData?.token}`
       },
       body: JSON.stringify(bookingData)
     })

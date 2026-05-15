@@ -1,4 +1,5 @@
 "use client";
+import { authClient } from "@/lib/auth-client";
 import {AlertDialog, Button} from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -6,10 +7,13 @@ import { toast } from "react-toastify";
 const EditDelete = ({detailsData}) => {
   const router = useRouter()
   const handleDelete = async()=>{
+    const {data: tokenData} = await authClient.token()
+    
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destination/${detailsData._id}`,{
       method: 'DELETE',
       headers:{
-        'content-type': 'application/json'
+        'content-type': 'application/json',
+        authorization: `Bearer ${tokenData?.token}`
       },
     })
     const data = await res.json()
