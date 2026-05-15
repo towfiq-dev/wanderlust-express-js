@@ -1,4 +1,5 @@
 'use client'
+import { authClient } from '@/lib/auth-client';
 import React from 'react';
 import { CgAdd } from 'react-icons/cg';
 import { FcCancel } from 'react-icons/fc';
@@ -9,10 +10,15 @@ const AddTravelPackage = () => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     const newData = Object.fromEntries(formData.entries())
-    
+
+    const {data: tokenData} = await authClient.token()
+    console.log(tokenData);
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destination`,{
       method: 'POST',
-      headers:{'content-type': 'application/json'},
+      headers:{
+        'content-type': 'application/json',
+        authorization: `Bearer ${tokenData?.token}`
+      },
       body: JSON.stringify(newData)
     })
     const data = await res.json()

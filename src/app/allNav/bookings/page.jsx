@@ -6,12 +6,19 @@ import React from 'react';
 const Bookings = async() => {
   const session = await auth.api.getSession({
     headers: await headers()
+  })
 
+  const {token} = await auth.api.getToken({
+    headers: await headers()
   })
 
   const user = session?.user
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/bookings/${user?.id}`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/bookings/${user?.id}`, {
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  })
   const bookings = await res.json()
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-10 mt-20 md:px-10">
