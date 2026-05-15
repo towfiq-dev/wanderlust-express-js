@@ -24,7 +24,7 @@ const Modals = ({detailsData}) => {
   const formData = new FormData(e.currentTarget)
   const newData = Object.fromEntries(formData.entries())
   
-  const res = await fetch(`http://localhost:5000/destination/${detailsData._id}`,{
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destination/${detailsData._id}`,{
     method: 'PATCH',
     headers:{'content-type': 'application/json'},
     body: JSON.stringify(newData)

@@ -47,7 +47,7 @@ const DestinationCard = ({ destination }) => {
 
         {/* Action Link */}
         <Link href={`/allNav/destinations/${_id}`}>
-        <button className="flex items-center gap-1 text-cyan-500 font-bold text-sm uppercase tracking-widest border-b-2 border-transparent hover:border-cyan-500 transition-all pt-2">
+        <button className="flex cursor-pointer items-center gap-1 text-cyan-500 font-bold text-sm uppercase tracking-widest border-b-2 border-transparent hover:border-cyan-500 transition-all pt-2">
           Book Now
           <ArrowUpRight size={16} />
         </button>

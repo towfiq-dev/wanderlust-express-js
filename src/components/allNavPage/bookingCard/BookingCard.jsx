@@ -46,9 +46,13 @@ const BookingCard = ({detailsData}) => {
       date: new Date(date)
     }
     
-    const res = await fetch('http://localhost:5000/bookings',{
+    const {data:tokenData} = await authClient.token()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/bookings`,{
       method: 'POST',
-      headers: {'content-type': 'application/json'},
+      headers: {
+        'content-type': 'application/json',
+        authorization: `Bearer ${tokenData?.json}`
+      },
       body: JSON.stringify(bookingData)
     })
 
@@ -79,7 +83,7 @@ const BookingCard = ({detailsData}) => {
 
             <button 
             onClick={handleBooking}
-            className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all transform hover:scale-[1.02] shadow-lg shadow-cyan-200 mb-8">
+            className="w-full bg-cyan-500 cursor-pointer hover:bg-cyan-600 text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all transform hover:scale-[1.02] shadow-lg shadow-cyan-200 mb-8">
               Book Now <ArrowRight size={22} />
             </button>
 

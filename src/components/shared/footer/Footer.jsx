@@ -1,9 +1,8 @@
 import React from 'react';
-// react-icons থেকে আইকন ইমপোর্ট করা হয়েছে
+
 import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 import { HiOutlineArrowUpRight } from 'react-icons/hi2';
-//import { HiOutlineLocationMarker, HiOutlineArrowUpRight } from 'react-icons/hi';
 
 const Footer = () => {
   return (
