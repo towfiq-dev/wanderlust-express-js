@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useMemo } from 'react';
-import FilteringSort from '../filtering-Sort/Filtering-Sort';
 import DestinationCard from '../destinationCard/DestinationCard';
+import FilteringSort from '../filteringSort/FilteringSort';
 
 const DestinationsClient = ({ destinations }) => {
   const [filters, setFilters] = useState({
@@ -37,6 +37,9 @@ const DestinationsClient = ({ destinations }) => {
         break;
       case 'rating_desc':
         result.sort((a, b) => Number(b.rating || 4.5) - Number(a.rating || 4.5));
+        break;
+      case 'rating_asc':
+        result.sort((a, b) => Number(a.rating || 4.5) - Number(b.rating || 4.5));
         break;
       case 'name_asc':
         result.sort((a, b) =>
