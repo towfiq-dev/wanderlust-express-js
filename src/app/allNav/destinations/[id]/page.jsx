@@ -11,9 +11,8 @@ const DetailsPage = async ({ params }) => {
   const { id } = await params
   const tokenData = await auth.api.getToken({
     headers: await headers()
-    
   })
-   const token = tokenData?.token
+  const token = tokenData?.token
   
   const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/destination/${id}`, 
     {
@@ -31,6 +30,7 @@ const DetailsPage = async ({ params }) => {
     imageUrl,
     description
   } = detailsData
+
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-8 font-sans mt-25">
       <div className='flex justify-end mb-6'>
