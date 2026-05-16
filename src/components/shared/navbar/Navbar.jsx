@@ -82,10 +82,11 @@ const Navbar = () => {
                   </Button>
                 </Link>
 
-                <Avatar
-                  src={user?.image}
-                  name={user?.name}
-                  className='w-10 h-10 border-2 border-cyan-500'
+                <Image className='rounded-full w-13 h-13 border-2 border-cyan-500'
+                      width={100}
+                      height={100}
+                      src={user.image}
+                      alt={user.name}
                 />
 
                 <Button
@@ -147,9 +148,11 @@ const Navbar = () => {
 
                   <div className='flex items-center gap-3'>
 
-                    <Avatar
-                      src={user?.image}
-                      name={user?.name}
+                    <Image className='rounded-full w-13 h-13 border-2 border-cyan-500'
+                      width={100}
+                      height={100}
+                      src={user.image}
+                      alt={user.name}
                     />
 
                     <div>
