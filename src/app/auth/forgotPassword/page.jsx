@@ -1,61 +1,66 @@
 'use client'
 import React from 'react';
-import { Button, Input } from '@heroui/react';
-import { Mail, ArrowLeft } from 'lucide-react';
+import { Input } from '@heroui/react';
+import { ArrowLeft, Mail, Send } from 'lucide-react';
 import Link from 'next/link';
 
 const ForgotPassword = () => {
   return (
-    <section className="min-h-screen bg-gray-50 flex items-center justify-center px-6 py-12 mt-10">
-      <div className="bg-white p-8 md:p-12 rounded-3xl shadow-xl max-w-md w-full border border-gray-100">
-        
-        {/* Header Section */}
-        <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-[#001D3D] mb-3">Forgot Password?</h1>
-          <p className="text-gray-500 leading-relaxed">
-            No worries, it happens! Enter your email address and we'll send you a link to reset your password.
-          </p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-cyan-50/30 flex items-center justify-center px-4 py-16 mt-16">
+      <div className="w-full max-w-[460px]">
+        <div className="bg-white rounded-3xl shadow-2xl shadow-gray-200/80 border border-gray-100/50 overflow-hidden">
 
-        {/* Form Section */}
-        <form className="space-y-6">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2 ml-1">
-              Email Address
-            </label>
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              variant="bordered"
-              radius="lg"
-              className="w-full"
-              // startContent={
-              //   <Mail className="text-gray-400" size={20} />
-              // }
-            />
+          {/* Header */}
+          <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-cyan-900 px-10 py-12 text-center overflow-hidden">
+            <div className="absolute inset-0 opacity-10"
+              style={{ backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`, backgroundSize: '30px 30px' }} />
+            <div className="relative">
+              <div className="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-5 border border-white/20">
+                <Mail size={28} className="text-cyan-300" />
+              </div>
+              <h1 className="text-3xl font-serif font-bold text-white">Forgot Password?</h1>
+              <p className="text-cyan-100/70 mt-2 text-sm leading-relaxed max-w-xs mx-auto">
+                Enter your email and we&apos;ll send you a reset link
+              </p>
+            </div>
           </div>
 
-          <Button 
-            className="w-full bg-[#00B4D8] hover:bg-[#0096C7] text-white font-bold py-6 rounded-xl transition-all shadow-lg shadow-cyan-100"
-            size="lg"
-          >
-            Send Reset Link
-          </Button>
-        </form>
+          {/* Form */}
+          <div className="p-8 md:p-10">
+            <div className="space-y-5">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                <div className="relative">
+                  <Mail size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 z-10" />
+                  <input
+                    type="email"
+                    placeholder="you@example.com"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3.5 pl-11 pr-4 outline-none transition-all focus:border-cyan-400 focus:ring-4 focus:ring-cyan-50 text-sm"
+                  />
+                </div>
+              </div>
 
-        {/* Footer Section */}
-        <div className="mt-10 text-center">
-          <Link 
-            href="/auth/signin" 
-            className="inline-flex items-center gap-2 text-[#00B4D8] font-semibold hover:underline group"
-          >
-            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-            Back to Sign In
-          </Link>
+              <button
+                className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg shadow-cyan-200/50 hover:scale-[1.01] transition-all cursor-pointer"
+              >
+                <Send size={16} />
+                Send Reset Link
+              </button>
+            </div>
+
+            <div className="mt-8 text-center">
+              <Link
+                href="/auth/signin"
+                className="inline-flex items-center gap-2 text-gray-500 hover:text-cyan-600 font-medium text-sm transition-colors group"
+              >
+                <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                Back to Sign In
+              </Link>
+            </div>
+          </div>
         </div>
-
       </div>
-    </section>
+    </div>
   );
 };
 
